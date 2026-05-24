@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import ThreatFeed from "../components/ThreatFeed";
+import { THEME, SPACING, SHADOWS, BORDERS } from "../theme";
 
 import {
   PieChart,
@@ -19,7 +20,80 @@ import {
   Legend
 } from "recharts";
 
-const COLORS = ["#0073c6", "#70e3a0", "#e89851", "#b98ecb", "#e74c3c"];
+const COLORS = THEME.charts;
+
+// Custom Tooltip Component
+const CustomTooltip = ({ active, payload, label }) => {
+  if (!active || !payload || !payload.length) return null;
+  
+  return (
+    <div style={{
+      background: 'white',
+      padding: '12px 16px',
+      borderRadius: 8,
+      boxShadow: SHADOWS.lg,
+      border: BORDERS.light
+    }}>
+      <div style={{
+        fontSize: 13,
+        fontWeight: 600,
+        color: THEME.neutral[900],
+        marginBottom: 8
+      }}>
+        {label}
+      </div>
+      {payload.map((entry, index) => (
+        <div key={index} style={{
+          fontSize: 12,
+          color: THEME.neutral[500],
+          display: 'flex',
+          alignItems: 'center',
+          gap: 8,
+          marginTop: 4
+        }}>
+          <div style={{
+            width: 8,
+            height: 8,
+            borderRadius: '50%',
+            background: entry.color
+          }} />
+          <span>{entry.name}: <strong style={{ color: THEME.neutral[900] }}>{entry.value}</strong></span>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+// Status Badge Component
+const StatusBadge = ({ status }) => {
+  const styles = {
+    phishing: {
+      background: '#FEE2E2',
+      color: '#991B1B',
+      border: '1px solid #FCA5A5'
+    },
+    legitimate: {
+      background: '#D1FAE5',
+      color: '#065F46',
+      border: '1px solid #6EE7B7'
+    }
+  };
+  
+  return (
+    <span style={{
+      ...styles[status],
+      padding: '4px 12px',
+      borderRadius: 12,
+      fontSize: 12,
+      fontWeight: 600,
+      textTransform: 'uppercase',
+      letterSpacing: '0.3px',
+      display: 'inline-block'
+    }}>
+      {status}
+    </span>
+  );
+};
 
 export default function Dashboard() {
 
@@ -110,14 +184,32 @@ export default function Dashboard() {
   }
 
   return (
-
-    <div style={{ padding: 40, maxWidth: 1400, margin: "auto" }}>
-
-      <h1>AutoComplyAI Enterprise Security Command Center</h1>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      style={{
+        padding: '40px 60px',
+        maxWidth: 1600,
+        margin: '0 auto',
+        background: THEME.neutral[50],
+        minHeight: '100vh'
+      }}
+    >
+      <h1 style={{
+        fontSize: 32,
+        fontWeight: 700,
+        color: THEME.neutral[900],
+        marginBottom: SPACING.lg,
+        paddingBottom: SPACING.sm,
+        borderBottom: `2px solid ${THEME.neutral[200]}`
+      }}>
+        AutoComplyAI Enterprise Security Command Center
+      </h1>
 
       {/* KPI CARDS */}
 
-      <div style={{ display: "flex", gap: 20, marginTop: 30 }}>
+      <div style={{ display: "flex", gap: SPACING.md, marginTop: SPACING.lg }}>
 
         <Card title="Total Scans" value={total} />
         <Card title="Phishing Detected" value={phishing} />
@@ -132,8 +224,8 @@ export default function Dashboard() {
         style={{
           display: "grid",
           gridTemplateColumns: "2fr 1fr",
-          gap: 30,
-          marginTop: 40
+          gap: SPACING.lg,
+          marginTop: SPACING.xl
         }}
       >
 
@@ -149,7 +241,7 @@ export default function Dashboard() {
 
               <YAxis domain={[0, 100]} />
 
-              <Tooltip />
+              <Tooltip content={<CustomTooltip />} />
 
               <Line
                 type="monotone"
@@ -174,8 +266,8 @@ export default function Dashboard() {
         style={{
           display: "grid",
           gridTemplateColumns: "1fr 1fr",
-          gap: 30,
-          marginTop: 50
+          gap: SPACING.lg,
+          marginTop: SPACING.xl
         }}
       >
 
@@ -198,7 +290,7 @@ export default function Dashboard() {
 
               </Pie>
 
-              <Tooltip />
+              <Tooltip content={<CustomTooltip />} />
               <Legend verticalAlign="bottom" height={36} />
 
             </PieChart>
@@ -225,7 +317,7 @@ export default function Dashboard() {
 
               </Pie>
 
-              <Tooltip />
+              <Tooltip content={<CustomTooltip />} />
 
             </PieChart>
           </ResponsiveContainer>
@@ -236,7 +328,7 @@ export default function Dashboard() {
 
       {/* MITRE ATTACK */}
 
-      <div style={{ marginTop: 60 }}>
+      <div style={{ marginTop: SPACING.xxl }}>
 
         <Panel title="MITRE ATT&CK Technique Distribution">
 
@@ -256,7 +348,7 @@ export default function Dashboard() {
 
               <YAxis />
 
-              <Tooltip />
+              <Tooltip content={<CustomTooltip />} />
 
               <Legend />
 
@@ -272,61 +364,100 @@ export default function Dashboard() {
 
       {/* RECENT ACTIVITY */}
 
-      <div style={{ marginTop: 60 }}>
+      <div style={{ marginTop: SPACING.xxl }}>
+        <h2 style={{
+          fontSize: 24,
+          fontWeight: 600,
+          color: THEME.neutral[900],
+          marginBottom: SPACING.md
+        }}>
+          Recent Scan Activity
+        </h2>
 
-        <h2>Recent Scan Activity</h2>
+        <div style={{
+          background: 'white',
+          borderRadius: BORDERS.radius.lg,
+          overflow: 'hidden',
+          boxShadow: SHADOWS.sm,
+          border: BORDERS.light
+        }}>
+          <table style={{ width: "100%", borderCollapse: "collapse" }}>
 
-        <table style={{ width: "100%", marginTop: 20, borderCollapse: "collapse" }}>
-
-          <thead>
-
-            <tr style={{ background: "#f4f6f9" }}>
-              <th style={th}>ID</th>
-              <th style={th}>Verdict</th>
-              <th style={th}>Risk</th>
-              <th style={th}>Mode</th>
-              <th style={th}>Timestamp</th>
-            </tr>
-
-          </thead>
-
-          <tbody>
-
-            {scans.slice().reverse().slice(0,10).map(scan => (
-
-              <tr key={scan.id}>
-
-                <td style={td}>{scan.id}</td>
-
-                <td style={td}>
-                  <span
-                    style={{
-                      color:
-                        scan.verdict === "phishing"
-                          ? "#d9534f"
-                          : "#2ECC71",
-                      fontWeight: "bold"
-                    }}
-                  >
-                    {scan.verdict}
-                  </span>
-                </td>
-
-                <td style={td}>{scan.risk_score}</td>
-
-                <td style={td}>{scan.mode}</td>
-
-                <td style={td}>
-                  {new Date(scan.created_at).toLocaleString()}
-                </td>
-
+            <thead>
+              <tr style={{
+                background: THEME.neutral[50],
+                borderBottom: `2px solid ${THEME.neutral[200]}`
+              }}>
+                <th style={th}>ID</th>
+                <th style={th}>Verdict</th>
+                <th style={th}>Risk</th>
+                <th style={th}>Mode</th>
+                <th style={th}>Timestamp</th>
               </tr>
+            </thead>
 
-            ))}
+            <tbody>
+              {scans.slice().reverse().slice(0,10).map((scan, index) => (
+                <tr
+                  key={scan.id}
+                  style={{
+                    borderBottom: `1px solid ${THEME.neutral[100]}`,
+                    transition: 'background 0.15s ease'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.background = THEME.neutral[50]}
+                  onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+                >
+                  <td style={td}>
+                    <span style={{
+                      fontWeight: 600,
+                      color: THEME.neutral[700]
+                    }}>
+                      #{scan.id}
+                    </span>
+                  </td>
 
-          </tbody>
+                  <td style={td}>
+                    <StatusBadge status={scan.verdict} />
+                  </td>
 
-        </table>
+                  <td style={td}>
+                    <span style={{
+                      fontWeight: 600,
+                      color: scan.risk_score > 70 ? THEME.status.error :
+                             scan.risk_score > 40 ? THEME.status.warning :
+                             THEME.status.success
+                    }}>
+                      {scan.risk_score}
+                    </span>
+                  </td>
+
+                  <td style={td}>
+                    <span style={{
+                      padding: '2px 8px',
+                      background: THEME.neutral[100],
+                      borderRadius: 4,
+                      fontSize: 12,
+                      fontWeight: 500,
+                      color: THEME.neutral[700]
+                    }}>
+                      {scan.mode}
+                    </span>
+                  </td>
+
+                  <td style={td}>
+                    <span style={{
+                      fontSize: 13,
+                      color: THEME.neutral[500]
+                    }}>
+                      {new Date(scan.created_at).toLocaleString()}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+
+          </table>
+        </div>
 
 
       {/* DASHBOARD METRICS & VISUALIZATIONS GUIDE */}
@@ -972,7 +1103,7 @@ export default function Dashboard() {
 
       </div>
 
-    </div>
+    </motion.div>
 
   );
 
@@ -981,51 +1112,107 @@ export default function Dashboard() {
 /* COMPONENTS */
 
 function Card({ title, value }) {
+  const [isHovered, setIsHovered] = useState(false);
 
   return (
-
-    <div
+    <motion.div
+      whileHover={{ y: -4, boxShadow: SHADOWS.lg }}
+      transition={{ duration: 0.2 }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       style={{
         flex: 1,
-        padding: 25,
-        background: "white",
-        borderRadius: 10,
-        boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
-        textAlign: "center"
+        padding: '28px 24px',
+        background: 'white',
+        borderRadius: BORDERS.radius.lg,
+        boxShadow: SHADOWS.sm,
+        border: BORDERS.light,
+        cursor: 'pointer',
+        position: 'relative',
+        overflow: 'hidden'
       }}
     >
-
-      <h4 style={{ color:"#666" }}>{title}</h4>
-
-      <h1 style={{ color:"#0073c6" }}>{value}</h1>
-
-    </div>
-
+      {/* Gradient accent bar */}
+      <div style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        height: 4,
+        background: `linear-gradient(90deg, ${THEME.primary.main} 0%, ${THEME.primary.light} 100%)`
+      }} />
+      
+      <div style={{
+        fontSize: 14,
+        color: THEME.neutral[500],
+        fontWeight: 500,
+        marginBottom: 12,
+        textTransform: 'uppercase',
+        letterSpacing: '0.5px',
+        textAlign: 'center'
+      }}>
+        {title}
+      </div>
+      
+      <div style={{
+        fontSize: 36,
+        fontWeight: 700,
+        color: THEME.neutral[900],
+        lineHeight: 1,
+        textAlign: 'center'
+      }}>
+        {value}
+      </div>
+    </motion.div>
   );
-
 }
 
-function Panel({ title, children }) {
-
+function Panel({ title, subtitle, children }) {
   return (
-
-    <div
-      style={{
-        background: "white",
-        padding: 25,
-        borderRadius: 10,
-        boxShadow: "0 4px 12px rgba(0,0,0,0.08)"
-      }}
-    >
-
-      <h3>{title}</h3>
-
-      {children}
-
+    <div style={{
+      background: 'white',
+      padding: 0,
+      borderRadius: BORDERS.radius.lg,
+      boxShadow: SHADOWS.sm,
+      border: BORDERS.light,
+      overflow: 'hidden'
+    }}>
+      {/* Panel Header */}
+      <div style={{
+        padding: '20px 24px',
+        borderBottom: BORDERS.light,
+        background: THEME.neutral[50],
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+      }}>
+        <div>
+          <h3 style={{
+            margin: 0,
+            fontSize: 18,
+            fontWeight: 600,
+            color: THEME.neutral[900]
+          }}>
+            {title}
+          </h3>
+          {subtitle && (
+            <p style={{
+              margin: '4px 0 0 0',
+              fontSize: 13,
+              color: THEME.neutral[500]
+            }}>
+              {subtitle}
+            </p>
+          )}
+        </div>
+      </div>
+      
+      {/* Panel Content */}
+      <div style={{ padding: SPACING.md }}>
+        {children}
+      </div>
     </div>
-
   );
-
 }
 
 const th = {
