@@ -1,7 +1,9 @@
 from fastapi import FastAPI, Depends, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 from sqlalchemy.orm import Session
+from datetime import datetime, timezone
+from io import StringIO
 
 from .services.scan_service import ScanService
 from .api.threat_feed import router as threat_feed_router
@@ -239,202 +241,90 @@ def export_pdf(scan_id: int, db: Session = Depends(get_db)):
 
 @app.get("/export/json/{scan_id}")
 def export_json(scan_id: int, db: Session = Depends(get_db)):
-
-    from datetime import datetime
-
+    """Export scan report as JSON file."""
+    
     scan = db.query(Scan).filter(Scan.id == scan_id).first()
-
+    
     if not scan:
         return {"error": "Scan not found"}
-
+    
     report = build_report(scan)
-
-    file_path = f"report_{scan_id}.pdf"
-
-    doc = SimpleDocTemplate(file_path)
-
-    elements = []
-    styles = getSampleStyleSheet()
-
-    # =========================
-    # REPORT HEADER
-    # =========================
-
-    elements.append(
-        Paragraph("AutoComplyAI Enterprise Security Report", styles["Title"])
+    
+    # Add metadata
+    report["export_format"] = "JSON"
+    report["export_timestamp"] = datetime.now(timezone.utc).isoformat()
+    
+    # Return as downloadable JSON file
+    return JSONResponse(
+        content=report,
+        headers={
+            "Content-Disposition": f"attachment; filename=report_{scan_id}.json"
+        }
     )
 
-    elements.append(
-        Paragraph("AI-Powered Phishing Detection & Compliance Analysis", styles["Heading3"])
+
+# =========================
+# EXPORT CSV
+# =========================
+
+@app.get("/export/csv/{scan_id}")
+def export_csv(scan_id: int, db: Session = Depends(get_db)):
+    """Export scan report as CSV file."""
+    
+    scan = db.query(Scan).filter(Scan.id == scan_id).first()
+    
+    if not scan:
+        return {"error": "Scan not found"}
+    
+    report = build_report(scan)
+    
+    # Create CSV content
+    output = StringIO()
+    writer = csv.writer(output)
+    
+    # Write header
+    writer.writerow(["AutoComplyAI Security Analysis Report"])
+    writer.writerow([])
+    
+    # Write metadata
+    writer.writerow(["Report Metadata"])
+    writer.writerow(["Field", "Value"])
+    writer.writerow(["Scan ID", report["scan_id"]])
+    writer.writerow(["Generated At", report["generated_at"]])
+    writer.writerow(["Verdict", report["verdict"]])
+    writer.writerow(["Risk Score", report["risk_score"]])
+    writer.writerow(["Confidence", report["confidence"]])
+    writer.writerow(["Detection Mode", report["mode"]])
+    writer.writerow([])
+    
+    # Write executive summary
+    writer.writerow(["Executive Summary"])
+    writer.writerow([report["executive_summary"]])
+    writer.writerow([])
+    
+    # Write MITRE ATT&CK mapping
+    writer.writerow(["MITRE ATT&CK Mapping"])
+    for item in report["mitre_mapping"]:
+        writer.writerow([item])
+    writer.writerow([])
+    
+    # Write compliance mapping
+    writer.writerow(["Compliance Mapping"])
+    for item in report["compliance_mapping"]:
+        writer.writerow([item])
+    writer.writerow([])
+    
+    # Write remediation
+    writer.writerow(["Recommended Remediation"])
+    for item in report["remediation"]:
+        writer.writerow([item])
+    
+    # Prepare response
+    output.seek(0)
+    return StreamingResponse(
+        iter([output.getvalue()]),
+        media_type="text/csv",
+        headers={
+            "Content-Disposition": f"attachment; filename=report_{scan_id}.csv"
+        }
     )
-
-    elements.append(Spacer(1, 0.3 * inch))
-
-    # =========================
-    # REPORT METADATA
-    # =========================
-
-    generated_date = datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
-
-    metadata = [
-        ["Project", "AutoComplyAI Enterprise"],
-        ["Scan ID", str(scan_id)],
-        ["Generated Date", generated_date],
-        ["Detection Mode", report["mode"]],
-    ]
-
-    meta_table = Table(metadata, colWidths=[2.5 * inch, 3.5 * inch])
-
-    meta_table.setStyle(
-        TableStyle(
-            [
-                ("GRID", (0, 0), (-1, -1), 1, colors.grey),
-                ("BACKGROUND", (0, 0), (0, -1), colors.lightgrey),
-            ]
-        )
-    )
-
-    elements.append(meta_table)
-    elements.append(Spacer(1, 0.4 * inch))
-
-    # =========================
-    # EXECUTIVE SUMMARY
-    # =========================
-
-    elements.append(
-        Paragraph("Executive Summary", styles["Heading2"])
-    )
-
-    summary = report.get(
-        "executive_summary",
-        "This report summarizes the AI-driven analysis performed by AutoComplyAI."
-    )
-
-    elements.append(Paragraph(summary, styles["Normal"]))
-    elements.append(Spacer(1, 0.3 * inch))
-
-    # =========================
-    # RISK SUMMARY
-    # =========================
-
-    elements.append(
-        Paragraph("Risk Assessment Summary", styles["Heading2"])
-    )
-
-    risk_table_data = [
-        ["Metric", "Value"],
-        ["Verdict", report["verdict"]],
-        ["Risk Score", report["risk_score"]],
-        ["Confidence", report["confidence"]],
-    ]
-
-    risk_table = Table(risk_table_data, colWidths=[2.5 * inch, 3.5 * inch])
-
-    risk_table.setStyle(
-        TableStyle(
-            [
-                ("BACKGROUND", (0, 0), (-1, 0), colors.lightgrey),
-                ("GRID", (0, 0), (-1, -1), 1, colors.grey),
-                ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
-            ]
-        )
-    )
-
-    elements.append(risk_table)
-    elements.append(Spacer(1, 0.4 * inch))
-
-    # =========================
-    # MITRE ATT&CK
-    # =========================
-
-    elements.append(
-        Paragraph("MITRE ATT&CK Mapping", styles["Heading2"])
-    )
-
-    elements.append(
-        ListFlowable(
-            [
-                ListItem(Paragraph(item, styles["Normal"]))
-                for item in report["mitre_mapping"]
-            ]
-        )
-    )
-
-    elements.append(Spacer(1, 0.4 * inch))
-
-    # =========================
-    # COMPLIANCE
-    # =========================
-
-    elements.append(
-        Paragraph("Compliance Mapping", styles["Heading2"])
-    )
-
-    elements.append(
-        ListFlowable(
-            [
-                ListItem(Paragraph(item, styles["Normal"]))
-                for item in report["compliance_mapping"]
-            ]
-        )
-    )
-
-    elements.append(Spacer(1, 0.4 * inch))
-
-    # =========================
-    # REMEDIATION
-    # =========================
-
-    elements.append(
-        Paragraph("Recommended Remediation", styles["Heading2"])
-    )
-
-    elements.append(
-        ListFlowable(
-            [
-                ListItem(Paragraph(item, styles["Normal"]))
-                for item in report["remediation"]
-            ]
-        )
-    )
-
-    elements.append(Spacer(1, 0.4 * inch))
-
-    # =========================
-    # ANALYST GUIDE
-    # =========================
-
-    elements.append(
-        Paragraph("Analyst Interpretation Guide", styles["Heading2"])
-    )
-
-    guide_text = """
-    Risk Score indicates the likelihood of phishing activity based on rule-based 
-    and machine learning detection models. Scores above 70 indicate high-risk 
-    phishing indicators and should be investigated immediately.
-
-    MITRE ATT&CK mappings provide insight into the adversarial tactics 
-    potentially represented by the detected patterns.
-
-    Compliance mappings identify security controls relevant to the detected 
-    activity across frameworks such as ISO 27001, NIST, and GDPR.
-    """
-
-    elements.append(Paragraph(guide_text, styles["Normal"]))
-
-    elements.append(Spacer(1, 0.5 * inch))
-
-    # =========================
-    # FOOTER
-    # =========================
-
-    elements.append(
-        Paragraph(
-            "Updated By: Deepika Kothamasu — AI Security Command Center",
-            styles["Italic"],
-        )
-    )
-
-    doc.build(elements)
-
-    return FileResponse(file_path, filename=file_path)

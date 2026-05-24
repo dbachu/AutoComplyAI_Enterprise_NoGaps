@@ -112,17 +112,67 @@ export default function Reports() {
                   </ul>
                 </Section>
 
-                <button
-                  style={{ marginTop: 15 }}
-                  onClick={() =>
-                    window.open(
-                      `http://localhost:8000/export/pdf/${scan.id}`,
-                      "_blank"
-                    )
-                  }
-                >
-                  Export PDF
-                </button>
+                <div style={{ marginTop: 15, display: "flex", gap: 10 }}>
+                  <button
+                    style={{
+                      padding: "10px 20px",
+                      background: "#d9534f",
+                      color: "white",
+                      border: "none",
+                      borderRadius: 6,
+                      cursor: "pointer",
+                      fontWeight: "bold"
+                    }}
+                    onClick={() =>
+                      window.open(
+                        `http://localhost:8000/export/pdf/${scan.id}`,
+                        "_blank"
+                      )
+                    }
+                  >
+                    📄 Export PDF
+                  </button>
+
+                  <button
+                    style={{
+                      padding: "10px 20px",
+                      background: "#5cb85c",
+                      color: "white",
+                      border: "none",
+                      borderRadius: 6,
+                      cursor: "pointer",
+                      fontWeight: "bold"
+                    }}
+                    onClick={() =>
+                      window.open(
+                        `http://localhost:8000/export/json/${scan.id}`,
+                        "_blank"
+                      )
+                    }
+                  >
+                    📋 Export JSON
+                  </button>
+
+                  <button
+                    style={{
+                      padding: "10px 20px",
+                      background: "#5bc0de",
+                      color: "white",
+                      border: "none",
+                      borderRadius: 6,
+                      cursor: "pointer",
+                      fontWeight: "bold"
+                    }}
+                    onClick={() =>
+                      window.open(
+                        `http://localhost:8000/export/csv/${scan.id}`,
+                        "_blank"
+                      )
+                    }
+                  >
+                    📊 Export CSV
+                  </button>
+                </div>
 
               </div>
             )}
