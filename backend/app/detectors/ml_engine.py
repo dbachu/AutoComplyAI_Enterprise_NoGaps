@@ -15,7 +15,9 @@ if os.path.exists(MODEL_PATH) and os.path.exists(VECT_PATH):
 
 
 def detect(text):
-
+    """
+    Detect phishing using ML model with fallback to heuristics.
+    """
     text_lower = text.lower()
 
     ml_score = 0
@@ -23,9 +25,14 @@ def detect(text):
 
     # If ML model exists use it
     if model and vectorizer:
-        X = vectorizer.transform([text])
-        prob = model.predict_proba(X)[0][1]
-        ml_score = int(prob * 100)
+        try:
+            X = vectorizer.transform([text])
+            prob = model.predict_proba(X)[0][1]
+            ml_score = int(prob * 100)
+        except Exception as e:
+            # Fallback to heuristic scoring if model fails
+            print(f"ML model error: {e}")
+            ml_score = 0
 
     indicators = 0
     reasons = []

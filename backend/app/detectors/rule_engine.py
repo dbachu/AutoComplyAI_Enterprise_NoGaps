@@ -3,9 +3,16 @@ import math
 
 
 def shannon_entropy(text):
-    prob = [float(text.count(c)) / len(text) for c in dict.fromkeys(list(text))]
-    entropy = -sum([p * math.log2(p) for p in prob])
-    return entropy
+    """Calculate Shannon entropy of text to detect suspicious domains."""
+    if not text or len(text) == 0:
+        return 0.0
+    
+    try:
+        prob = [float(text.count(c)) / len(text) for c in dict.fromkeys(list(text))]
+        entropy = -sum([p * math.log2(p) for p in prob if p > 0])
+        return entropy
+    except (ValueError, ZeroDivisionError):
+        return 0.0
 
 
 def detect(text):
@@ -28,11 +35,15 @@ def detect(text):
     # URL Entropy (suspicious domain)
     # -----------------------------
     for url in urls:
-        domain = url.split("/")[2]
-
-        if shannon_entropy(domain) > 3.5:
-            risk += 20
-            reasons.append("High entropy domain (possible phishing)")
+        try:
+            domain = url.split("/")[2] if len(url.split("/")) > 2 else url
+            
+            if shannon_entropy(domain) > 3.5:
+                risk += 20
+                reasons.append("High entropy domain (possible phishing)")
+        except (IndexError, AttributeError):
+            # Skip malformed URLs
+            continue
 
     # -----------------------------
     # Urgency indicators

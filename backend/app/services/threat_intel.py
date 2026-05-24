@@ -13,20 +13,25 @@ def extract_urls(text):
 
 
 def check_phishtank(url):
-
+    """
+    Check if URL is in PhishTank database.
+    Returns False on any error to avoid blocking scans.
+    """
     try:
-
         res = requests.post(
             PHISHTANK_URL,
-            data={"url": url}
+            data={"url": url},
+            timeout=5  # Add timeout to prevent hanging
         )
+        
+        if res.status_code == 200:
+            data = res.json()
+            return data.get("results", {}).get("valid", False)
+        
+        return False
 
-        data = res.json()
-
-        return data.get("results", {}).get("valid", False)
-
-    except Exception:
-
+    except (requests.RequestException, ValueError, KeyError):
+        # Silently fail - don't block scans due to external API issues
         return False
 
 

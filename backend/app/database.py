@@ -5,10 +5,16 @@ import os
 
 DATABASE_URL = os.getenv(
     "DATABASE_URL",
-    "postgresql://postgres:postgres@db:5432/autocomply"
+    "postgresql://autocomply:autocomply@postgres:5432/autocomply"
 )
 
-engine = create_engine(DATABASE_URL)
+# Add connection pool settings for better performance
+engine = create_engine(
+    DATABASE_URL,
+    pool_pre_ping=True,
+    pool_size=10,
+    max_overflow=20
+)
 
 SessionLocal = sessionmaker(
     autocommit=False,
