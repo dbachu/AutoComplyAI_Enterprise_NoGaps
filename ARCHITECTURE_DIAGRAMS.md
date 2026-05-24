@@ -23,19 +23,22 @@ This document provides visual representations of the system architecture, includ
 graph TB
     subgraph "Client Layer"
         Browser[Web Browser]
-        API_Client[API Clients<br/>Python/JavaScript/cURL]
+        API_Client["API Clients
+        Python/JavaScript/cURL"]
     end
 
     subgraph "Frontend Layer - Port 5173"
         React[React 18 + Vite]
         Router[React Router]
-        Components[UI Components<br/>Dashboard, Scan, Reports, Architecture]
+        Components["UI Components
+        Dashboard, Scan, Reports, Architecture"]
     end
 
     subgraph "Backend Layer - Port 8000"
         FastAPI[FastAPI Server]
         CORS[CORS Middleware]
-        Routers[API Routers<br/>metrics, threat_feed, etc.]
+        Routers["API Routers
+        metrics, threat_feed, etc."]
     end
 
     subgraph "Business Logic Layer"
@@ -48,20 +51,28 @@ graph TB
     end
 
     subgraph "Detection Engines"
-        RuleEngine[Rule Engine<br/>Pattern Matching]
-        MLEngine[ML Engine<br/>TF-IDF + Classifier]
-        LLMEngine[LLM Engine<br/>GPT-4 / Mock]
-        HybridEngine[Hybrid Engine<br/>Ensemble Voting]
+        RuleEngine["Rule Engine
+        Pattern Matching"]
+        MLEngine["ML Engine
+        TF-IDF + Classifier"]
+        LLMEngine["LLM Engine
+        GPT-4 / Mock"]
+        HybridEngine["Hybrid Engine
+        Ensemble Voting"]
     end
 
     subgraph "Data Layer"
-        SQLite[(SQLite Database<br/>scans.db)]
-        ThreatDB[(Threat Intelligence<br/>IOC Database)]
+        SQLite[("SQLite Database
+        scans.db")]
+        ThreatDB[("Threat Intelligence
+        IOC Database")]
     end
 
     subgraph "External Services"
-        OpenAI[OpenAI API<br/>GPT-4]
-        ThreatFeeds[Threat Feeds<br/>External IOCs]
+        OpenAI["OpenAI API
+        GPT-4"]
+        ThreatFeeds["Threat Feeds
+        External IOCs"]
     end
 
     Browser --> React
@@ -107,38 +118,55 @@ graph TB
 ```mermaid
 graph TB
     subgraph "Frontend Application - React 18"
-        App[App.jsx<br/>Main Application]
+        App["App.jsx
+        Main Application"]
         
         subgraph "Routing"
-            Router[React Router<br/>BrowserRouter]
+            Router["React Router
+            BrowserRouter"]
         end
         
         subgraph "Pages"
-            Dashboard[Dashboard.jsx<br/>Main Analytics View]
-            Scan[Scan.jsx<br/>Email Scanning Interface]
-            Reports[Reports.jsx<br/>Historical Reports]
-            Architecture[Architecture.jsx<br/>System Documentation]
+            Dashboard["Dashboard.jsx
+            Main Analytics View"]
+            Scan["Scan.jsx
+            Email Scanning Interface"]
+            Reports["Reports.jsx
+            Historical Reports"]
+            Architecture["Architecture.jsx
+            System Documentation"]
         end
         
         subgraph "Shared Components"
-            Navbar[Navbar.jsx<br/>Navigation Bar]
-            KPICards[KPICards.jsx<br/>Metrics Display]
-            ThreatFeed[ThreatFeed.jsx<br/>Live Threat Stream]
-            MitreChart[MitreChart.jsx<br/>ATT&CK Heatmap]
-            RiskTrend[RiskTrendChart.jsx<br/>Time Series Chart]
-            AgentTimeline[AgentTimeline.jsx<br/>Agent Execution Flow]
-            DecisionBreakdown[DecisionBreakdown.jsx<br/>Engine Analysis]
+            Navbar["Navbar.jsx
+            Navigation Bar"]
+            KPICards["KPICards.jsx
+            Metrics Display"]
+            ThreatFeed["ThreatFeed.jsx
+            Live Threat Stream"]
+            MitreChart["MitreChart.jsx
+            ATT&CK Heatmap"]
+            RiskTrend["RiskTrendChart.jsx
+            Time Series Chart"]
+            AgentTimeline["AgentTimeline.jsx
+            Agent Execution Flow"]
+            DecisionBreakdown["DecisionBreakdown.jsx
+            Engine Analysis"]
         end
         
         subgraph "State Management"
-            LocalState[Component State<br/>useState]
-            Effects[Side Effects<br/>useEffect]
+            LocalState["Component State
+            useState"]
+            Effects["Side Effects
+            useEffect"]
             APIClient[Fetch API Client]
         end
         
         subgraph "Styling & Animation"
-            TailwindCSS[Tailwind CSS<br/>Utility Classes]
-            FramerMotion[Framer Motion<br/>Animations]
+            TailwindCSS["Tailwind CSS
+            Utility Classes"]
+            FramerMotion["Framer Motion
+            Animations"]
         end
     end
 
@@ -180,52 +208,81 @@ graph TB
 ```mermaid
 graph TB
     subgraph "Backend Application - FastAPI"
-        Main[main.py<br/>FastAPI App Entry]
+        Main["main.py
+        FastAPI App Entry"]
         
         subgraph "API Layer"
-            HealthEndpoint[/health<br/>Health Check]
-            ScanEndpoint[/scan<br/>POST Email Scan]
-            ScansEndpoint[/scans<br/>GET All Scans]
-            MetricsRouter[/metrics<br/>KPI Metrics]
-            ThreatFeedRouter[/threat-feed<br/>Recent Threats]
-            MitreRouter[/mitre-heatmap<br/>ATT&CK Data]
-            RiskTrendRouter[/risk-trend<br/>Time Series]
-            ThreatStatsRouter[/threat-stats<br/>Statistics]
-            ExportPDF[/export/pdf/{id}<br/>PDF Report]
-            ExportJSON[/export/json/{id}<br/>Enhanced PDF]
+            HealthEndpoint["/health
+            Health Check"]
+            ScanEndpoint["/scan
+            POST Email Scan"]
+            ScansEndpoint["/scans
+            GET All Scans"]
+            MetricsRouter["/metrics
+            KPI Metrics"]
+            ThreatFeedRouter["/threat-feed
+            Recent Threats"]
+            MitreRouter["/mitre-heatmap
+            ATT&CK Data"]
+            RiskTrendRouter["/risk-trend
+            Time Series"]
+            ThreatStatsRouter["/threat-stats
+            Statistics"]
+            ExportPDF["/export/pdf/{id}
+            PDF Report"]
+            ExportJSON["/export/json/{id}
+            Enhanced PDF"]
         end
         
         subgraph "Service Layer"
-            ScanService[scan_service.py<br/>Scan Orchestration]
-            ThreatIntelService[threat_intel.py<br/>IOC Enrichment]
+            ScanService["scan_service.py
+            Scan Orchestration"]
+            ThreatIntelService["threat_intel.py
+            IOC Enrichment"]
         end
         
         subgraph "Agent Layer"
-            AgentOrchestrator[agent_orchestrator.py<br/>Multi-Agent Coordinator]
-            DetectionAgent[detection_agent.py<br/>Threat Detection]
-            ThreatIntelAgent[threat_intel_agent.py<br/>IOC Analysis]
-            MitreAgent[mitre_agent.py<br/>ATT&CK Mapping]
-            ComplianceAgent[compliance_agent.py<br/>Framework Mapping]
-            ReportAgent[report_agent.py<br/>Report Generation]
-            OpenAIAgent[openai_agent.py<br/>GPT-4 Integration]
+            AgentOrchestrator["agent_orchestrator.py
+            Multi-Agent Coordinator"]
+            DetectionAgent["detection_agent.py
+            Threat Detection"]
+            ThreatIntelAgent["threat_intel_agent.py
+            IOC Analysis"]
+            MitreAgent["mitre_agent.py
+            ATT&CK Mapping"]
+            ComplianceAgent["compliance_agent.py
+            Framework Mapping"]
+            ReportAgent["report_agent.py
+            Report Generation"]
+            OpenAIAgent["openai_agent.py
+            GPT-4 Integration"]
         end
         
         subgraph "Detection Layer"
-            DetectionOrchestrator[orchestrator.py<br/>Engine Coordinator]
-            RuleEngine[rule_engine.py<br/>Pattern Matching]
-            MLEngine[ml_engine.py<br/>ML Classifier]
-            HybridEngine[hybrid_engine.py<br/>Ensemble Voting]
-            LLMModel[llm_model.py<br/>LLM Interface]
+            DetectionOrchestrator["orchestrator.py
+            Engine Coordinator"]
+            RuleEngine["rule_engine.py
+            Pattern Matching"]
+            MLEngine["ml_engine.py
+            ML Classifier"]
+            HybridEngine["hybrid_engine.py
+            Ensemble Voting"]
+            LLMModel["llm_model.py
+            LLM Interface"]
         end
         
         subgraph "Data Layer"
-            Database[database.py<br/>SQLAlchemy Session]
-            Models[models.py<br/>ORM Models]
-            Schemas[schemas.py<br/>Pydantic Schemas]
+            Database["database.py
+            SQLAlchemy Session"]
+            Models["models.py
+            ORM Models"]
+            Schemas["schemas.py
+            Pydantic Schemas"]
         end
         
         subgraph "Reporting Layer"
-            ReportBuilder[report_builder.py<br/>PDF Generation]
+            ReportBuilder["report_builder.py
+            PDF Generation"]
         end
     end
 
@@ -288,11 +345,11 @@ graph TB
 ```mermaid
 sequenceDiagram
     participant User as User Browser
-    participant Frontend as React Frontend<br/>:5173
-    participant Backend as FastAPI Backend<br/>:8000
+    participant Frontend as React Frontend :5173
+    participant Backend as FastAPI Backend :8000
     participant DB as SQLite Database
-    participant AI as AI Engines<br/>(Rule/ML/LLM)
-    participant External as External APIs<br/>(OpenAI)
+    participant AI as AI Engines (Rule/ML/LLM)
+    participant External as External APIs (OpenAI)
 
     Note over User,External: Email Scan Flow
     
@@ -300,7 +357,7 @@ sequenceDiagram
     Frontend->>User: 2. Display scan form
     
     User->>Frontend: 3. Submit email + mode
-    Frontend->>Backend: 4. POST /scan<br/>{text, mode}
+    Frontend->>Backend: 4. POST /scan {text, mode}
     
     Backend->>Backend: 5. Validate request
     Backend->>AI: 6. Route to detection engine
@@ -323,7 +380,7 @@ sequenceDiagram
     Backend->>DB: 9. Save scan result
     DB-->>Backend: 10. Scan ID
     
-    Backend-->>Frontend: 11. JSON response<br/>{scan_id, report, timeline}
+    Backend-->>Frontend: 11. JSON response {scan_id, report, timeline}
     Frontend->>Frontend: 12. Render results
     Frontend-->>User: 13. Display verdict + metrics
 
@@ -361,18 +418,27 @@ sequenceDiagram
 ```mermaid
 graph LR
     subgraph "Client Network"
-        Browser[Web Browser<br/>User Machine]
+        Browser["Web Browser
+        User Machine"]
     end
     
     subgraph "Application Network - Docker/Podman"
-        Frontend[Frontend Container<br/>Port 5173<br/>Vite Dev Server]
-        Backend[Backend Container<br/>Port 8000<br/>FastAPI + Uvicorn]
-        Database[SQLite Volume<br/>scans.db]
+        Frontend["Frontend Container
+        Port 5173
+        Vite Dev Server"]
+        Backend["Backend Container
+        Port 8000
+        FastAPI + Uvicorn"]
+        Database["SQLite Volume
+        scans.db"]
     end
     
     subgraph "External Network"
-        OpenAI[OpenAI API<br/>api.openai.com:443<br/>HTTPS]
-        ThreatFeeds[Threat Intel Feeds<br/>Various Providers]
+        OpenAI["OpenAI API
+        api.openai.com:443
+        HTTPS"]
+        ThreatFeeds["Threat Intel Feeds
+        Various Providers"]
     end
 
     Browser -->|HTTP :5173| Frontend
@@ -403,14 +469,21 @@ flowchart TD
     Validate -->|No| Error[Return 422 Error]
     Validate -->|Yes| Route{Route by Mode}
     
-    Route -->|rule| RuleEngine[Rule Engine<br/>Pattern Matching]
-    Route -->|ml| MLEngine[ML Engine<br/>TF-IDF Vectorization]
-    Route -->|hybrid| HybridEngine[Hybrid Engine<br/>Ensemble]
-    Route -->|openai| OpenAIEngine[OpenAI Engine<br/>GPT-4]
-    Route -->|llm_mock| MockEngine[Mock LLM<br/>Simulated]
+    Route -->|rule| RuleEngine["Rule Engine
+    Pattern Matching"]
+    Route -->|ml| MLEngine["ML Engine
+    TF-IDF Vectorization"]
+    Route -->|hybrid| HybridEngine["Hybrid Engine
+    Ensemble"]
+    Route -->|openai| OpenAIEngine["OpenAI Engine
+    GPT-4"]
+    Route -->|llm_mock| MockEngine["Mock LLM
+    Simulated"]
     
-    RuleEngine --> RuleResult[Rule Verdict<br/>+ Confidence]
-    MLEngine --> MLResult[ML Verdict<br/>+ Confidence]
+    RuleEngine --> RuleResult["Rule Verdict
+    + Confidence"]
+    MLEngine --> MLResult["ML Verdict
+    + Confidence"]
     
     HybridEngine --> CallRule[Call Rule Engine]
     HybridEngine --> CallML[Call ML Engine]
@@ -418,18 +491,21 @@ flowchart TD
     
     CallRule --> RuleResult
     CallML --> MLResult
-    CallLLM --> LLMResult[LLM Verdict<br/>+ Confidence]
+    CallLLM --> LLMResult["LLM Verdict
+    + Confidence"]
     
     RuleResult --> Vote{Weighted Voting}
     MLResult --> Vote
     LLMResult --> Vote
     
-    Vote --> FinalVerdict[Final Verdict<br/>+ Risk Score]
+    Vote --> FinalVerdict["Final Verdict
+    + Risk Score"]
     
     OpenAIEngine --> GPT4[GPT-4 API Call]
     GPT4 --> LLMResult
     
-    MockEngine --> MockResult[Mock Verdict<br/>+ Confidence]
+    MockEngine --> MockResult["Mock Verdict
+    + Confidence"]
     MockResult --> FinalVerdict
     
     FinalVerdict --> Enrich[Enrich with Context]
@@ -466,11 +542,17 @@ flowchart TD
     Parallel --> RiskTrend[GET /risk-trend]
     Parallel --> ThreatStats[GET /threat-stats]
     
-    Metrics --> MetricsDB[(Query: COUNT, AVG<br/>Group by mode)]
-    ThreatFeed --> FeedDB[(Query: ORDER BY<br/>created_at DESC<br/>LIMIT 20)]
-    MitreHeatmap --> MitreDB[(Query: Extract JSON<br/>Count techniques)]
-    RiskTrend --> TrendDB[(Query: GROUP BY date<br/>AVG risk_score)]
-    ThreatStats --> StatsDB[(Query: COUNT<br/>Group by verdict)]
+    Metrics --> MetricsDB[("Query: COUNT, AVG
+    Group by mode")]
+    ThreatFeed --> FeedDB[("Query: ORDER BY
+    created_at DESC
+    LIMIT 20")]
+    MitreHeatmap --> MitreDB[("Query: Extract JSON
+    Count techniques")]
+    RiskTrend --> TrendDB[("Query: GROUP BY date
+    AVG risk_score")]
+    ThreatStats --> StatsDB[("Query: COUNT
+    Group by verdict")]
     
     MetricsDB --> MetricsJSON[Metrics JSON]
     FeedDB --> FeedJSON[Feed JSON]
@@ -496,7 +578,8 @@ flowchart TD
     Chart --> Display
     PieChart --> Display
     
-    Display --> Poll{Poll Timer<br/>3-4 seconds}
+    Display --> Poll{"Poll Timer
+    3-4 seconds"}
     Poll -->|Repeat| Request
 
     style Request fill:#61dafb
@@ -604,12 +687,15 @@ flowchart TD
     URLCheck --> RuleScore
     SenderCheck --> RuleScore
     
-    RuleScore --> RuleVerdict[Rule Verdict<br/>Confidence: 0-1]
+    RuleScore --> RuleVerdict["Rule Verdict
+    Confidence: 0-1"]
     
     MLPath --> Vectorize[TF-IDF Vectorization]
-    Vectorize --> MLModel[Trained Classifier<br/>Logistic Regression]
+    Vectorize --> MLModel["Trained Classifier
+    Logistic Regression"]
     MLModel --> MLPredict[Predict Probability]
-    MLPredict --> MLVerdict[ML Verdict<br/>Confidence: 0-1]
+    MLPredict --> MLVerdict["ML Verdict
+    Confidence: 0-1"]
     
     LLMPath --> Prompt[Build LLM Prompt]
     Prompt --> LLMCall{LLM Type}
@@ -619,19 +705,24 @@ flowchart TD
     
     GPT4 --> LLMParse[Parse LLM Response]
     MockLLM --> LLMParse
-    LLMParse --> LLMVerdict[LLM Verdict<br/>Confidence: 0-1]
+    LLMParse --> LLMVerdict["LLM Verdict
+    Confidence: 0-1"]
     
     RuleVerdict --> Ensemble{Hybrid Mode?}
     MLVerdict --> Ensemble
     LLMVerdict --> Ensemble
     
-    Ensemble -->|Yes| WeightedVote[Weighted Voting<br/>Rule: 30%<br/>ML: 30%<br/>LLM: 40%]
+    Ensemble -->|Yes| WeightedVote["Weighted Voting
+    Rule: 30%
+    ML: 30%
+    LLM: 40%"]
     Ensemble -->|No| SingleEngine[Single Engine Result]
     
     WeightedVote --> FinalDecision[Final Verdict + Risk Score]
     SingleEngine --> FinalDecision
     
-    FinalDecision --> Breakdown[Decision Breakdown<br/>Per-Engine Details]
+    FinalDecision --> Breakdown["Decision Breakdown
+    Per-Engine Details"]
     Breakdown --> Output[Return to Orchestrator]
 
     style Input fill:#4caf50
@@ -652,24 +743,40 @@ graph TB
         Podman[Podman/Docker Engine]
         
         subgraph "Container Network - autocomplyai_default"
-            Frontend[Frontend Container<br/>Node 18 + Vite<br/>Port: 5173<br/>Image: autocomplyai-frontend]
-            Backend[Backend Container<br/>Python 3.11 + FastAPI<br/>Port: 8000<br/>Image: autocomplyai-backend]
+            Frontend["Frontend Container
+            Node 18 + Vite
+            Port: 5173
+            Image: autocomplyai-frontend"]
+            Backend["Backend Container
+            Python 3.11 + FastAPI
+            Port: 8000
+            Image: autocomplyai-backend"]
         end
         
         subgraph "Volumes"
-            DBVolume[Database Volume<br/>./backend/scans.db<br/>Persistent Storage]
-            BackendCode[Backend Code Volume<br/>./backend/app<br/>Hot Reload]
-            FrontendCode[Frontend Code Volume<br/>./frontend/src<br/>Hot Reload]
+            DBVolume["Database Volume
+            ./backend/scans.db
+            Persistent Storage"]
+            BackendCode["Backend Code Volume
+            ./backend/app
+            Hot Reload"]
+            FrontendCode["Frontend Code Volume
+            ./frontend/src
+            Hot Reload"]
         end
         
         subgraph "Environment"
-            EnvFile[.env File<br/>OPENAI_API_KEY<br/>Configuration]
+            EnvFile[".env File
+            OPENAI_API_KEY
+            Configuration"]
         end
     end
     
     subgraph "External"
-        Browser[Web Browser<br/>localhost:5173]
-        APIClient[API Clients<br/>localhost:8000]
+        Browser["Web Browser
+        localhost:5173"]
+        APIClient["API Clients
+        localhost:8000"]
     end
 
     Podman --> Frontend
@@ -817,16 +924,23 @@ graph LR
     end
     
     subgraph "Integration Points"
-        EmailGateway[Email Gateway<br/>Real-time Scanning]
-        SIEM[SIEM Platform<br/>Event Forwarding]
-        ThreatIntel[Threat Intel Platform<br/>IOC Enrichment]
-        TicketSystem[Ticketing System<br/>Incident Creation]
-        Dashboard[Custom Dashboards<br/>Metrics API]
+        EmailGateway["Email Gateway
+        Real-time Scanning"]
+        SIEM["SIEM Platform
+        Event Forwarding"]
+        ThreatIntel["Threat Intel Platform
+        IOC Enrichment"]
+        TicketSystem["Ticketing System
+        Incident Creation"]
+        Dashboard["Custom Dashboards
+        Metrics API"]
     end
     
     subgraph "External Services"
-        OpenAI[OpenAI GPT-4<br/>LLM Analysis]
-        ThreatFeeds[Threat Feeds<br/>IOC Updates]
+        OpenAI["OpenAI GPT-4
+        LLM Analysis"]
+        ThreatFeeds["Threat Feeds
+        IOC Updates"]
     end
 
     EmailGateway -->|POST /scan| System
@@ -861,14 +975,22 @@ graph LR
 ```mermaid
 graph TB
     subgraph "Security Layers"
-        Input[User Input] --> Validation[Input Validation<br/>Pydantic Schemas]
-        Validation --> Sanitization[Text Sanitization<br/>XSS Prevention]
-        Sanitization --> CORS[CORS Middleware<br/>Origin Control]
-        CORS --> RateLimit[Rate Limiting<br/>DDoS Protection]
-        RateLimit --> Auth[Authentication<br/>API Keys]
-        Auth --> Authorization[Authorization<br/>Role-Based Access]
-        Authorization --> Encryption[Data Encryption<br/>At Rest & Transit]
-        Encryption --> Audit[Audit Logging<br/>Activity Tracking]
+        Input[User Input] --> Validation["Input Validation
+        Pydantic Schemas"]
+        Validation --> Sanitization["Text Sanitization
+        XSS Prevention"]
+        Sanitization --> CORS["CORS Middleware
+        Origin Control"]
+        CORS --> RateLimit["Rate Limiting
+        DDoS Protection"]
+        RateLimit --> Auth["Authentication
+        API Keys"]
+        Auth --> Authorization["Authorization
+        Role-Based Access"]
+        Authorization --> Encryption["Data Encryption
+        At Rest & Transit"]
+        Encryption --> Audit["Audit Logging
+        Activity Tracking"]
         Audit --> Response[Secure Response]
     end
 
