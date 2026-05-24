@@ -811,7 +811,7 @@ export default function Dashboard() {
               icon: "🔌",
               title: "API Walkthrough Guide",
               description: "Interactive Swagger documentation, endpoint reference, request/response examples, and integration patterns",
-              link: "https://github.com/yourusername/AutoComplyAI_Enterprise_NoGaps/blob/main/API_WALKTHROUGH_GUIDE.md",
+              link: "https://github.com/dbachu/AutoComplyAI_Enterprise_NoGaps/blob/main/API_WALKTHROUGH_GUIDE.md",
               localFile: "API_WALKTHROUGH_GUIDE.md",
               highlights: ["Swagger UI at :8000/docs", "10 REST endpoints", "5 detection modes", "Common use cases"]
             },
@@ -819,7 +819,7 @@ export default function Dashboard() {
               icon: "🏗️",
               title: "Architecture Diagrams",
               description: "System architecture, component diagrams, network flows, data pipelines, and deployment configurations",
-              link: "https://github.com/yourusername/AutoComplyAI_Enterprise_NoGaps/blob/main/ARCHITECTURE_DIAGRAMS.md",
+              link: "https://github.com/dbachu/AutoComplyAI_Enterprise_NoGaps/blob/main/ARCHITECTURE_DIAGRAMS.md",
               localFile: "ARCHITECTURE_DIAGRAMS.md",
               highlights: ["8 Mermaid diagrams", "Multi-agent flow", "Detection pipeline", "Container architecture"]
             },
@@ -827,7 +827,7 @@ export default function Dashboard() {
               icon: "💻",
               title: "Code Walkthrough Demo",
               description: "Step-by-step code explanation, agent orchestration, detection engines, and implementation details",
-              link: "https://github.com/yourusername/AutoComplyAI_Enterprise_NoGaps/blob/main/CODE_WALKTHROUGH_DEMO.md",
+              link: "https://github.com/dbachu/AutoComplyAI_Enterprise_NoGaps/blob/main/CODE_WALKTHROUGH_DEMO.md",
               localFile: "CODE_WALKTHROUGH_DEMO.md",
               highlights: ["Agent timeline", "Hybrid detection", "MITRE mapping", "PDF generation"]
             }
