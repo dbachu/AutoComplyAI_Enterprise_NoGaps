@@ -918,8 +918,8 @@ export default function Dashboard() {
               <div>
                 <div style={{ fontSize: 13, color: "#888", fontWeight: 600 }}>Backend API</div>
                 <div style={{ fontSize: 14, color: "#0072C6", fontWeight: 700 }}>
-                  <a href="http://localhost:8000" target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", color: "#0072C6" }}>
-                    localhost:8000
+                  <a href="http://localhost:8000/health" target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", color: "#0072C6" }}>
+                    localhost:8000/health
                   </a>
                 </div>
               </div>
