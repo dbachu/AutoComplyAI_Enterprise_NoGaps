@@ -948,6 +948,18 @@ export default function Dashboard() {
                 </div>
               </div>
             </div>
+            
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <span style={{ fontSize: 24 }}>💻</span>
+              <div>
+                <div style={{ fontSize: 13, color: "#888", fontWeight: 600 }}>Phase-2 Code</div>
+                <div style={{ fontSize: 14, color: "#0072C6", fontWeight: 700 }}>
+                  <a href="https://github.com/dbachu/AutoComplyAI_Enterprise_NoGaps" target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", color: "#0072C6" }}>
+                    GitHub Repository
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
