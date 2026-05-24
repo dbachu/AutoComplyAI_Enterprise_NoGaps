@@ -57,7 +57,7 @@ export default function Navbar() {
 
         <a
           style={linkStyle}
-          href="https://github.com/dbachu/AutoComplyAI-Enterprise"
+          href="https://github.com/dbachu/AutoComplyAI_Enterprise_NoGaps"
           target="_blank"
           rel="noreferrer"
         >
